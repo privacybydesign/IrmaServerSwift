@@ -1,0 +1,5 @@
+module Cirmac [system] {
+  header "irmac.h"
+  link "irmac"
+  export *
+}

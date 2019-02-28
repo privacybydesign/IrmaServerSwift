@@ -1,25 +1,20 @@
-# IrmaSwift
+# IrmaServerSwift
 
-A package for building servers using irma in swift.
+A package for building servers using IRMA in swift.
 
 ## Build instructions
 
-This package requires a version of the irmac library to be present. Prebuilt libraries for Mac and Linux can be downloaded from the releases tab. During building of projects based on this library, one needs to tell the swift package manager where to find these using `-Xlinker -L/path/to/irmac/library/`
+This package requires a version of the `irmac` library to be present. Prebuilt libraries for Mac and Linux can be downloaded from the releases tab. During building of projects based on this library, one needs to tell the swift package manager where to find these using `-Xlinker -L/path/to/irmac/library/`
 
 ## Usage
 
 This library allows integration of an irma server into the rest of your web server written in Swift. Before use, it needs to be initialized:
 ```swift
 Initialize(configuration: "{
-	\"schemes_path\": \"irma_configuration\",
-	\"schemes_download_default\": true,
-	\"url\": \"http://localhost:8080/irma/\"
+	\"url\": \"https://localhost:8080/irma/\"
 }")
 ```
-Here we specify three options:
-- `schemes_path` specifies the directory where all schemes and related configuration are stored
-- `schemes_download_default` enables automatic downloading of the default schemes (pbdf and irma-demo)
-- `url` specifies the path prefix where we are going to serve the libraries pages
+This is the `url` that the IRMA app will connect to during IRMA sessions (so ensure that it is reachable by IRMA apps).
 
 After initialization, the server will need to call the library to handle every request for an url starting with prefix above. The library will then return information for the http response. As an example, this can be implemented in a kitura server as follows:
 ```swift
@@ -65,7 +60,7 @@ router.all("/irma/*") { request, response, next in
 }
 ```
 
-To start an irma session, the server can now call `StartSession` with a session request as described in TODO. This results in a token and a session pointer. The session pointer can be passed to irma_mobile using one of the front-end libraries such as irmajs. The token allows the requestor to monitor the sessions status and fetch its results. The results of the session can be obtained using `GetSessionResult`, which returns the status of the library. A example of how to use this, taken from the example server, is shown below:
+To start an IRMA session, the server can now call `StartSession` with a session request as described in TODO. This results in a token and a session pointer. The session pointer can be passed to `irma_mobile` using one of the front-end libraries such as `irmajs`. The token allows the requestor to monitor the sessions status and fetch its results. The results of the session can be obtained using `GetSessionResult`, which returns the status of the library. A example of how to use this, taken from the example server, is shown below:
 
 ```swift
 router.get("/startSession") { request, response, next in
@@ -116,8 +111,9 @@ router.get("/fetch") { request, response, next in
 
 ## Email
 
-Users are encouraged to provide an email address with the `email` option in the `configuration` json, subscribing for notifications about changes in the IRMA software or ecosystem. [More information](TODO).
+Users are encouraged to provide an email address with the `email` option in the `configuration` json, subscribing for notifications about changes in the IRMA software or ecosystem. [More information](https://github.com/privacybydesign/irmago/tree/master/server).
 
 ## Example server
 
-An example server build using this library can be found at TODO.
+An example server build using this library can be found in the [irma-examples](https://github.com/privacybydesign/irma-examples/tree/master/demoserverswift).
+
